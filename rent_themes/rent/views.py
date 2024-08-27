@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import *
-
+from .utils import CalcularDesconto
 
 #Página inicial com a lista de clientes
 def index(request):
@@ -201,7 +201,13 @@ class RentViews:
                  client_id= request.POST['select_client'],
                  theme_id = request.POST['select_theme'],
                  address = a )
+
+        valor_aluguel = CalcularDesconto.cacular_desconto(date.weekday, client_id, theme_id)
+
+        r.value = valor_aluguel
+
         r.save()
+
         return redirect('/listRent')
 
     #Deleta um aluguel e volta para listagem de alugueis
